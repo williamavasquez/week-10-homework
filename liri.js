@@ -2,16 +2,15 @@
 var keys = require('./keys.js');
 var Twitter = require('twitter');
 var spotify = require('spotify');
+var request = require('request');
 var prompt = require('prompt');
+var fs = require('fs');
 // ********* end of modules *********************
 
 // variables with the data from the console
 var PersonArgument = process.argv[2];
 var AdditionalArguments = process.argv[3];
-
-
-var milliseconds = Date();
-console.log(milliseconds);
+// ****************************************************
 
 // prompt.start();
 //
@@ -81,12 +80,12 @@ function SpotifyCall() {
 function  MovieCall(){
   // check if we get a value or not
   if (AdditionalArguments === undefined) {
-    AdditionalArguments = "what/'s my age again";
+    AdditionalArguments = 'Mr. Nobody';
   }else {
     AdditionalArguments = process.argv[3];
   }
 
-  request('http://www.omdbapi.com/?t=the+notebook&y=&plot=short&r=json&tomatoes=true', function (error, response, body) {
+  request('http://www.omdbapi.com/?t='+AdditionalArguments+'&y=&plot=short&r=json&tomatoes=true', function (error, response, body) {
     if (!error && response.statusCode == 200) {
       JsonBody = JSON.parse(body);
       console.log(JsonBody.Title);
@@ -101,3 +100,11 @@ function  MovieCall(){
     }
   })
 }
+
+function logAction() {
+  var milliseconds = Date();
+  logData = '\r\n' + milliseconds + ":  "+ PersonArgument
+  fs.appendFile('log.txt', logData);
+}
+
+logAction();
