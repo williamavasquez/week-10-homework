@@ -36,9 +36,13 @@ switch (PersonArgument) {
     MovieCall();
     break;
   default:
+    var PersonArgument = "No Command";
+    var AdditionalArguments = "no arguments";
+    console.log("please introduce a command ('my-tweets', 'spotify-this-song','movie-this')");
 }
 
 function TwitterCall(){
+  AdditionalArguments = "Last 20 Tweets"
   // import twitter keys (this file is hidden to protect the user)
   var client = new Twitter(keys.twitterKeys);
   // These are the parameters we pass to the call (user name, and how many tweets we want back)
@@ -103,8 +107,9 @@ function  MovieCall(){
 
 function logAction() {
   var milliseconds = Date();
-  logData = '\r\n' + milliseconds + ":  "+ PersonArgument
+  logData = '\r\n' + milliseconds + ":  "+ PersonArgument + " - " + AdditionalArguments
   fs.appendFile('log.txt', logData);
 }
 
+// log every command in log.txt file
 logAction();
