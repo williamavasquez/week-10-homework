@@ -1,0 +1,26 @@
+{
+  "name": "week-10-homework",
+  "version": "1.0.0",
+  "description": "",
+  "main": "keys.js",
+  "dependencies": {
+    "prompt": "^1.0.0",
+    "request": "^2.70.0",
+    "spotify": "^0.3.0",
+    "twitter": "^1.2.5"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/williamavasquez/week-10-homework.git"
+  },
+  "author": "William Vasquez",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/williamavasquez/week-10-homework/issues"
+  },
+  "homepage": "https://github.com/williamavasquez/week-10-homework#readme"
+}
