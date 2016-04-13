@@ -9,19 +9,19 @@ var fs = require('fs');
 
 // variables with the data from the console
 personArgument = process.argv[2];
-AdditionalArguments = process.argv[3];
+additionalArguments = process.argv[3];
 // ****************************************************
 // switch function to check arguments
-function switchFunction(personArgument){
+function switchFunction(personArgument, additionalArguments){
   switch (personArgument) {
     case "my-tweets":
       TwitterCall();
       break;
     case "spotify-this-song":
-      SpotifyCall();
+      SpotifyCall(additionalArguments);
       break;
     case "movie-this":
-      MovieCall();
+      MovieCall(additionalArguments);
       break;
     case "do-what-it-says":
       WhatitSaysCall();
@@ -32,9 +32,10 @@ function switchFunction(personArgument){
       console.log("please introduce a command ('my-tweets', 'spotify-this-song','movie-this')");
   }
 };
-switchFunction(personArgument);
+switchFunction(personArgument, additionalArguments);
+
 function TwitterCall(){
-  AdditionalArguments = "Last 20 Tweets"
+  additionalArguments = "Last 20 Tweets"
   // import twitter keys (this file is hidden to protect the user)
   var client = new Twitter(keys.twitterKeys);
   // These are the parameters we pass to the call (user name, and how many tweets we want back)
@@ -51,15 +52,15 @@ function TwitterCall(){
   });
 }
 
-function SpotifyCall() {
+function SpotifyCall(additionalArguments) {
   // check if we get a value or not
-  if (AdditionalArguments === undefined) {
-    AdditionalArguments = "what/'s my age again";
+  if (additionalArguments === undefined) {
+    additionalArguments = "what/'s my age again";
   }else {
-    AdditionalArguments = process.argv[3];
+    additionalArguments = additionalArguments;
   }
   // spotify search function
-  spotify.search({ type: 'track', query: AdditionalArguments, limit:1 },
+  spotify.search({ type: 'track', query: additionalArguments, limit:1 },
 
   function(err, data) {
     if ( err ) {
@@ -73,15 +74,15 @@ function SpotifyCall() {
   });
 }
 
-function  MovieCall(){
+function  MovieCall(additionalArguments){
   // check if we get a value or not
-  if (AdditionalArguments === undefined) {
-    AdditionalArguments = 'Mr. Nobody';
+  if (additionalArguments === undefined) {
+    additionalArguments = 'Mr. Nobody';
   }else {
-    AdditionalArguments = process.argv[3];
+    additionalArguments = process.argv[3];
   }
 
-  request('http://www.omdbapi.com/?t='+AdditionalArguments+'&y=&plot=short&r=json&tomatoes=true', function (error, response, body) {
+  request('http://www.omdbapi.com/?t='+additionalArguments+'&y=&plot=short&r=json&tomatoes=true', function (error, response, body) {
     if (!error && response.statusCode == 200) {
       JsonBody = JSON.parse(body);
       console.log(JsonBody.Title);
@@ -100,15 +101,21 @@ function  MovieCall(){
 function WhatitSaysCall() {
   fs.readFile('random.txt', 'utf8', function(err,data){
     var things = data.split(',');
-    console.log(things[1]);
+    if (things[1]==undefined) {
+      additionalArguments = " ";
+      // this function assumes 2 things: a.) there is a comma after the first command b.)there is no text after the comma
+      switchFunction(things[0],additionalArguments);
+    }else {
+      // this function runs when both a command and a argument are passed
+      switchFunction(things[0],things[1]);
+    }
   })
 }
 
 function logAction() {
   var milliseconds = Date();
-  logData = '\r\n' + milliseconds + ":  "+ personArgument + " - " + AdditionalArguments
+  logData = '\r\n' + milliseconds + ":  "+ personArgument + " - " + additionalArguments
   fs.appendFile('log.txt', logData);
-  console.log("appended");
 }
 
 // log every command in log.txt file
