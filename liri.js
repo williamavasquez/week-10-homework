@@ -8,39 +8,31 @@ var fs = require('fs');
 // ********* end of modules *********************
 
 // variables with the data from the console
-var PersonArgument = process.argv[2];
-var AdditionalArguments = process.argv[3];
+personArgument = process.argv[2];
+AdditionalArguments = process.argv[3];
 // ****************************************************
-
-// prompt.start();
-//
-// prompt.get(['username', 'email'], function (err, result) {
-//   if (err) { return onErr(err); }
-//   run = result.username
-// });
-//
-// function onErr(err) {
-//   console.log(err);
-//   return 1;
-// }
-
 // switch function to check arguments
-switch (PersonArgument) {
-  case "my-tweets":
-    TwitterCall();
-    break;
-  case "spotify-this-song":
-    SpotifyCall();
-    break;
-  case "movie-this":
-    MovieCall();
-    break;
-  default:
-    var PersonArgument = "No Command";
-    var AdditionalArguments = "no arguments";
-    console.log("please introduce a command ('my-tweets', 'spotify-this-song','movie-this')");
-}
-
+function switchFunction(personArgument){
+  switch (personArgument) {
+    case "my-tweets":
+      TwitterCall();
+      break;
+    case "spotify-this-song":
+      SpotifyCall();
+      break;
+    case "movie-this":
+      MovieCall();
+      break;
+    case "do-what-it-says":
+      WhatitSaysCall();
+      break;
+    default:
+      personArgument = "No Command";
+      additionalArguments = "no arguments";
+      console.log("please introduce a command ('my-tweets', 'spotify-this-song','movie-this')");
+  }
+};
+switchFunction(personArgument);
 function TwitterCall(){
   AdditionalArguments = "Last 20 Tweets"
   // import twitter keys (this file is hidden to protect the user)
@@ -105,11 +97,31 @@ function  MovieCall(){
   })
 }
 
+function WhatitSaysCall() {
+  fs.readFile('random.txt', 'utf8', function(err,data){
+    var things = data.split(',');
+    console.log(things[1]);
+  })
+}
+
 function logAction() {
   var milliseconds = Date();
-  logData = '\r\n' + milliseconds + ":  "+ PersonArgument + " - " + AdditionalArguments
+  logData = '\r\n' + milliseconds + ":  "+ personArgument + " - " + AdditionalArguments
   fs.appendFile('log.txt', logData);
+  console.log("appended");
 }
 
 // log every command in log.txt file
 logAction();
+
+// prompt.start();
+//
+// prompt.get(['username', 'email'], function (err, result) {
+//   if (err) { return onErr(err); }
+//   run = result.username
+// });
+//
+// function onErr(err) {
+//   console.log(err);
+//   return 1;
+// }
